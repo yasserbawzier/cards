@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isValidCard(data) {
+      return data.cardId is string && data.cardId.size() > 0 &&
+             data.profile is map && data.profile.fullName is string && data.profile.fullName.size() > 0 &&
+             data.phoneNumbers is list &&
+             data.bankAccounts is list &&
+             data.vcardRaw is string;
+    }
+
+    // User-isolated cards: Each user manages their own cards, but cards are publicly readable for sharing permanent links
+    match /users/{userId}/cards/{cardId} {
+      // Anyone with the link can view the card (public read-only)
+      allow read: if true;
+      // Only the card owner (or local session user) can create, update, or delete
+      allow create, update: if (request.auth == null || request.auth.uid == userId) && isValidCard(request.resource.data);
+      allow delete: if request.auth == null || request.auth.uid == userId;
+    }
+
+    // Legacy fallback path if referenced
+    match /cards/{cardId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}

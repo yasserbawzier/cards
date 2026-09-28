@@ -1,0 +1,6 @@
+{
+  "name": "Digital Business Card & vCard Generator",
+  "description": "بطاقة أعمال رقمية بسيطة مصممة للجوال لتسجيل الاسم، الشركة، أرقام الهواتف وقنوات الواتساب، وحسابات الصرافة والبنوك مع رمز QR وتحميل vCard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

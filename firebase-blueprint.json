@@ -1,0 +1,84 @@
+{
+  "entities": {
+    "DigitalCard": {
+      "title": "DigitalCard",
+      "description": "Represents a digital business card with personal profile, multiple contact channels, and bank exchange accounts",
+      "type": "object",
+      "properties": {
+        "cardId": {
+          "type": "string",
+          "description": "Unique identifier / slug for the card"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "UID of the owner of this card"
+        },
+        "profile": {
+          "type": "object",
+          "description": "Profile information including full name and company",
+          "properties": {
+            "fullName": {
+              "type": "string"
+            },
+            "companyName": {
+              "type": "string"
+            },
+            "jobTitle": {
+              "type": "string"
+            },
+            "bio": {
+              "type": "string"
+            }
+          },
+          "required": ["fullName"]
+        },
+        "phoneNumbers": {
+          "type": "array",
+          "description": "List of phone and WhatsApp numbers",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": { "type": "string" },
+              "number": { "type": "string" },
+              "isWhatsapp": { "type": "boolean" },
+              "whatsappLink": { "type": ["string", "null"] }
+            },
+            "required": ["number", "isWhatsapp"]
+          }
+        },
+        "bankAccounts": {
+          "type": "array",
+          "description": "List of exchange and bank accounts",
+          "items": {
+            "type": "object",
+            "properties": {
+              "exchangeName": { "type": "string" },
+              "accountNumber": { "type": "string" },
+              "accountHolderName": { "type": ["string", "null"] }
+            },
+            "required": ["exchangeName", "accountNumber"]
+          }
+        },
+        "vcardRaw": {
+          "type": "string",
+          "description": "Formatted vCard 3.0 raw string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["cardId", "profile", "phoneNumbers", "bankAccounts", "vcardRaw"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/cards/{cardId}": {
+      "schema": "DigitalCard",
+      "description": "User isolated collection of digital business cards"
+    }
+  }
+}
